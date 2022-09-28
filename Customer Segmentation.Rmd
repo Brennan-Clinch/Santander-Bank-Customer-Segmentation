@@ -1,0 +1,99 @@
+---
+title: "Untitled"
+author: "Brennan Clinch"
+date: "9/26/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+```
+
+## Reading in the data
+
+```{r}
+cust <- read.csv("C://Users//JCCLI//Downloads//cust_seg.csv")
+```
+
+## Preview of data
+
+```{r}
+head(cust)
+```
+
+## Variable type conversion
+```{r}
+### Change age to numeric
+cust$age <- as.numeric(cust$age)
+
+### Change antiguedad to numeric
+cust$antiguedad <- as.numeric(cust$antiguedad)
+
+### Change renta to numeric
+cust$renta <- as.numeric(cust$renta)
+
+### ind_nuevo to factor
+cust$ind_nuevo <- as.numeric(cust$ind_nuevo)
+
+### indrel as factor
+cust$indrel <- as.factor(cust$indrel)
+
+### tipodom as factor
+cust$tipodom <- as.factor(cust$tipodom)
+
+### cod_prov as factor
+cust$cod_prov <- as.factor(cust$cod_prov)
+
+### ind_actividad_cliente as factor
+cust$ind_actividad_cliente <- as.factor(cust$ind_actividad_cliente)
+
+### New preview of data
+head(cust)
+```
+
+### Exploratory analysis on numeric variables
+
+```{r}
+g <- ggplot(aes(y = age),data = cust)
+g + geom_boxplot(color = "blue")
+
+g2 <- ggplot(aes(y = renta),data = cust)
+g2 + geom_histogram(color = "red")
+
+g3 <- ggplot(aes(y = antiguedad), data = cust)
+g3 + geom_boxplot(color = "green")
+```
+```{r}
+summary(cust$renta)
+```
+
+### renta NA replacement with median
+
+```{r}
+cust$renta[is.na(cust$renta)] <- 106652
+summary(cust$renta)
+```
+
+
+### Outlier removal
+
+we will be removing outliers that are greater than Q3 + 5 *IQR
+```{r}
+custnew <- cust %>% filter(age %in% 18:90 & renta < 622732)
+
+summary(custnew$renta)
+```
+```{r}
+g4 <- ggplot(aes(x = renta), data = custnew)
+g4 + geom_histogram(color = "red")
+```
+
+
+### Save cleaned data for Python
+```{r}
+write.csv(custnew, "cust_seg_cleaned.csv")
+```
