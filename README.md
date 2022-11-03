@@ -1,2 +1,2 @@
 # Customer-Segmentation-Project
-Customer Segmentation group project for Data Glacier
+Customer Segmentation project for Data Glacier.
